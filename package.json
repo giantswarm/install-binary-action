@@ -1,0 +1,27 @@
+{
+  "name": "my-js-action",
+  "version": "0.1.0",
+  "description": "GitHub action to install compressed binary from a given URL.",
+  "main": "index.js",
+  "scripts": {
+    "lint": "NODE_OPTIONS=\"--no-warnings\" ./node_modules/.bin/eslint --ext .js ./index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/giantswarm/install-binary-action.git"
+  },
+  "author": "",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/kopiczko/my-js-action/issues"
+  },
+  "homepage": "https://github.com/kopiczko/my-js-action#readme",
+  "dependencies": {
+    "@actions/core": "^1.2.6",
+    "@actions/exec": "^1.0.4",
+    "@actions/tool-cache": "^1.6.0"
+  },
+  "devDependencies": {
+    "eslint": "^4.18.2"
+  }
+}
