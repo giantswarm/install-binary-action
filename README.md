@@ -4,6 +4,8 @@ This action installs a binary packed into a .tar.gz archive from a given URL.
 
 ## Inputs
 
+To check all the inputs and their defaults see [action.yml](action.yml) file.
+
 ### `binary`
 
 **Required.** Name of the binary to be installed.
@@ -37,7 +39,7 @@ Downloading a Giant Swarm binary with optional inputs left with default values:
 
 ```yaml
 - name: Test downloading Giant Swarm binary
-  uses: ./
+  uses: giantswarm/install-binary-action@VERSION
   with:
     binary: "devctl"
     version: "2.0.0"
@@ -47,7 +49,7 @@ Downloading an external binary with all optional inputs set:
 
 ```yaml
 - name: Test downloading external binary
-  uses: ./
+  uses: giantswarm/install-binary-action@VERSION
   with:
     binary: "semver"
     version: "3.0.0"
