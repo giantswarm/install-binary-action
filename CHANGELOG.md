@@ -7,4 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-[Unreleased]: https://github.com/giantswarm/install-binary-action/tree/master
+## [1.0.0] - 2020-10-20
+
+[Unreleased]: https://github.com/giantswarm/install-binary-action/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/giantswarm/install-binary-action/releases/tag/v1.0.0
