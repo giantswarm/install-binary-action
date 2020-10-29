@@ -1,14 +1,12 @@
+# DO NOT EDIT. Generated with:
+#
+#    devctl gen dependabot
+#
 version: 2
 updates:
-  - package_manager: "javascript"
-    directory: "/"
-    schedule:
-      interval: weekly
-      time: "04:00"
-    target-branch: master
-  - package-ecosystem: "github-actions"
-    directory: "/"
-    schedule:
-      interval: weekly
-      time: "04:00"
-    target-branch: master
+- package-ecosystem: github-actions
+  directory: "/"
+  schedule:
+    interval: weekly
+    time: "04:00"
+  target-branch: master
