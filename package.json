@@ -22,6 +22,6 @@
     "@actions/tool-cache": "^1.6.0"
   },
   "devDependencies": {
-    "eslint": "^4.18.2"
+    "eslint": "^7.14.0"
   }
 }
