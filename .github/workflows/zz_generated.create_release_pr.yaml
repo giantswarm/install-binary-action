@@ -124,7 +124,7 @@ jobs:
         run: |
           architect version ${{ env.architect_flags }}
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v2.3.4
       - name: Prepare release changes
         run: |
           architect prepare-release ${{ env.architect_flags }} --version "${{ needs.gather_facts.outputs.version }}"

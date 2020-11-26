@@ -15,7 +15,7 @@ jobs:
         with:
           node-version: "12"
       - name: Checkout code
-        uses: actions/checkout@v2-beta
+        uses: actions/checkout@v2.3.4
       - name: Lint
         run: "npm run lint"
       - name: Test downloading Giant Swarm binary
