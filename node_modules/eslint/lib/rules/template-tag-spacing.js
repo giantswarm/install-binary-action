@@ -11,17 +11,24 @@
 
 module.exports = {
     meta: {
+        type: "layout",
+
         docs: {
             description: "require or disallow spacing between template tags and their literals",
             category: "Stylistic Issues",
-            recommended: false
+            recommended: false,
+            url: "https://eslint.org/docs/rules/template-tag-spacing"
         },
 
         fixable: "whitespace",
 
         schema: [
             { enum: ["always", "never"] }
-        ]
+        ],
+        messages: {
+            unexpected: "Unexpected space between template tag and template literal.",
+            missing: "Missing space between template tag and template literal."
+        }
     },
 
     create(context) {
@@ -42,10 +49,13 @@ module.exports = {
             if (never && hasWhitespace) {
                 context.report({
                     node,
-                    loc: tagToken.loc.start,
-                    message: "Unexpected space between template tag and template literal.",
+                    loc: {
+                        start: tagToken.loc.end,
+                        end: literalToken.loc.start
+                    },
+                    messageId: "unexpected",
                     fix(fixer) {
-                        const comments = sourceCode.getComments(node.quasi).leading;
+                        const comments = sourceCode.getCommentsBefore(node.quasi);
 
                         // Don't fix anything if there's a single line comment after the template tag
                         if (comments.some(comment => comment.type === "Line")) {
@@ -61,8 +71,11 @@ module.exports = {
             } else if (!never && !hasWhitespace) {
                 context.report({
                     node,
-                    loc: tagToken.loc.start,
-                    message: "Missing space between template tag and template literal.",
+                    loc: {
+                        start: node.loc.start,
+                        end: literalToken.loc.start
+                    },
+                    messageId: "missing",
                     fix(fixer) {
                         return fixer.insertTextAfter(tagToken, " ");
                     }

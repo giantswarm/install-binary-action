@@ -5,7 +5,7 @@
 
 "use strict";
 
-const astUtils = require("../ast-utils");
+const astUtils = require("./utils/ast-utils");
 
 //------------------------------------------------------------------------------
 // Rule Definition
@@ -13,43 +13,33 @@ const astUtils = require("../ast-utils");
 
 module.exports = {
     meta: {
+        type: "layout",
+
         docs: {
             description: "enforce newlines between operands of ternary expressions",
             category: "Stylistic Issues",
-            recommended: false
+            recommended: false,
+            url: "https://eslint.org/docs/rules/multiline-ternary"
         },
+
         schema: [
             {
-                enum: ["always", "never"]
+                enum: ["always", "always-multiline", "never"]
             }
-        ]
+        ],
+        messages: {
+            expectedTestCons: "Expected newline between test and consequent of ternary expression.",
+            expectedConsAlt: "Expected newline between consequent and alternate of ternary expression.",
+            unexpectedTestCons: "Unexpected newline between test and consequent of ternary expression.",
+            unexpectedConsAlt: "Unexpected newline between consequent and alternate of ternary expression."
+        }
     },
 
     create(context) {
-        const multiline = context.options[0] !== "never";
-
-        //--------------------------------------------------------------------------
-        // Helpers
-        //--------------------------------------------------------------------------
-
-        /**
-         * Tests whether node is preceded by supplied tokens
-         * @param {ASTNode} node - node to check
-         * @param {ASTNode} parentNode - parent of node to report
-         * @param {boolean} expected - whether newline was expected or not
-         * @returns {void}
-         * @private
-         */
-        function reportError(node, parentNode, expected) {
-            context.report({
-                node,
-                message: "{{expected}} newline between {{typeOfError}} of ternary expression.",
-                data: {
-                    expected: expected ? "Expected" : "Unexpected",
-                    typeOfError: node === parentNode.test ? "test and consequent" : "consequent and alternate"
-                }
-            });
-        }
+        const option = context.options[0];
+        const multiline = option !== "never";
+        const allowSingleLine = option === "always-multiline";
+        const sourceCode = context.getSourceCode();
 
         //--------------------------------------------------------------------------
         // Public
@@ -57,24 +47,65 @@ module.exports = {
 
         return {
             ConditionalExpression(node) {
-                const areTestAndConsequentOnSameLine = astUtils.isTokenOnSameLine(node.test, node.consequent);
-                const areConsequentAndAlternateOnSameLine = astUtils.isTokenOnSameLine(node.consequent, node.alternate);
+                const questionToken = sourceCode.getTokenAfter(node.test, astUtils.isNotClosingParenToken);
+                const colonToken = sourceCode.getTokenAfter(node.consequent, astUtils.isNotClosingParenToken);
+
+                const firstTokenOfTest = sourceCode.getFirstToken(node);
+                const lastTokenOfTest = sourceCode.getTokenBefore(questionToken);
+                const firstTokenOfConsequent = sourceCode.getTokenAfter(questionToken);
+                const lastTokenOfConsequent = sourceCode.getTokenBefore(colonToken);
+                const firstTokenOfAlternate = sourceCode.getTokenAfter(colonToken);
+
+                const areTestAndConsequentOnSameLine = astUtils.isTokenOnSameLine(lastTokenOfTest, firstTokenOfConsequent);
+                const areConsequentAndAlternateOnSameLine = astUtils.isTokenOnSameLine(lastTokenOfConsequent, firstTokenOfAlternate);
 
                 if (!multiline) {
                     if (!areTestAndConsequentOnSameLine) {
-                        reportError(node.test, node, false);
+                        context.report({
+                            node: node.test,
+                            loc: {
+                                start: firstTokenOfTest.loc.start,
+                                end: lastTokenOfTest.loc.end
+                            },
+                            messageId: "unexpectedTestCons"
+                        });
                     }
 
                     if (!areConsequentAndAlternateOnSameLine) {
-                        reportError(node.consequent, node, false);
+                        context.report({
+                            node: node.consequent,
+                            loc: {
+                                start: firstTokenOfConsequent.loc.start,
+                                end: lastTokenOfConsequent.loc.end
+                            },
+                            messageId: "unexpectedConsAlt"
+                        });
                     }
                 } else {
+                    if (allowSingleLine && node.loc.start.line === node.loc.end.line) {
+                        return;
+                    }
+
                     if (areTestAndConsequentOnSameLine) {
-                        reportError(node.test, node, true);
+                        context.report({
+                            node: node.test,
+                            loc: {
+                                start: firstTokenOfTest.loc.start,
+                                end: lastTokenOfTest.loc.end
+                            },
+                            messageId: "expectedTestCons"
+                        });
                     }
 
                     if (areConsequentAndAlternateOnSameLine) {
-                        reportError(node.consequent, node, true);
+                        context.report({
+                            node: node.consequent,
+                            loc: {
+                                start: firstTokenOfConsequent.loc.start,
+                                end: lastTokenOfConsequent.loc.end
+                            },
+                            messageId: "expectedConsAlt"
+                        });
                     }
                 }
             }

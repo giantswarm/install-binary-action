@@ -1,6 +1,6 @@
 /**
  * @fileoverview Counts the cyclomatic complexity of each function of the script. See http://en.wikipedia.org/wiki/Cyclomatic_complexity.
- * Counts the number of if, conditional, for, whilte, try, switch/case,
+ * Counts the number of if, conditional, for, while, try, switch/case,
  * @author Patrick Brosset
  */
 
@@ -12,7 +12,7 @@
 
 const lodash = require("lodash");
 
-const astUtils = require("../ast-utils");
+const astUtils = require("./utils/ast-utils");
 
 //------------------------------------------------------------------------------
 // Rule Definition
@@ -20,10 +20,13 @@ const astUtils = require("../ast-utils");
 
 module.exports = {
     meta: {
+        type: "suggestion",
+
         docs: {
             description: "enforce a maximum cyclomatic complexity allowed in a program",
             category: "Best Practices",
-            recommended: false
+            recommended: false,
+            url: "https://eslint.org/docs/rules/complexity"
         },
 
         schema: [
@@ -49,20 +52,23 @@ module.exports = {
                     }
                 ]
             }
-        ]
+        ],
+
+        messages: {
+            complex: "{{name}} has a complexity of {{complexity}}. Maximum allowed is {{max}}."
+        }
     },
 
     create(context) {
         const option = context.options[0];
         let THRESHOLD = 20;
 
-        if (typeof option === "object" && option.hasOwnProperty("maximum") && typeof option.maximum === "number") {
-            THRESHOLD = option.maximum;
-        }
-        if (typeof option === "object" && option.hasOwnProperty("max") && typeof option.max === "number") {
-            THRESHOLD = option.max;
-        }
-        if (typeof option === "number") {
+        if (
+            typeof option === "object" &&
+            (Object.prototype.hasOwnProperty.call(option, "maximum") || Object.prototype.hasOwnProperty.call(option, "max"))
+        ) {
+            THRESHOLD = option.maximum || option.max;
+        } else if (typeof option === "number") {
             THRESHOLD = option;
         }
 
@@ -95,8 +101,8 @@ module.exports = {
             if (complexity > THRESHOLD) {
                 context.report({
                     node,
-                    message: "{{name}} has a complexity of {{complexity}}.",
-                    data: { name, complexity }
+                    messageId: "complex",
+                    data: { name, complexity, max: THRESHOLD }
                 });
             }
         }
@@ -122,21 +128,7 @@ module.exports = {
 
             // Avoiding `default`
             if (node.test) {
-                increaseComplexity(node);
-            }
-        }
-
-        /**
-         * Increase the logical path complexity in context
-         * @param {ASTNode} node node to evaluate
-         * @returns {void}
-         * @private
-         */
-        function increaseLogicalComplexity(node) {
-
-            // Avoiding &&
-            if (node.operator === "||") {
-                increaseComplexity(node);
+                increaseComplexity();
             }
         }
 
@@ -154,7 +146,7 @@ module.exports = {
 
             CatchClause: increaseComplexity,
             ConditionalExpression: increaseComplexity,
-            LogicalExpression: increaseLogicalComplexity,
+            LogicalExpression: increaseComplexity,
             ForStatement: increaseComplexity,
             ForInStatement: increaseComplexity,
             ForOfStatement: increaseComplexity,
