@@ -11,14 +11,18 @@
 
 module.exports = {
     meta: {
+        type: "suggestion",
+
         docs: {
             description: "require `Reflect` methods where applicable",
             category: "ECMAScript 6",
             recommended: false,
-            replacedBy: []
+            url: "https://eslint.org/docs/rules/prefer-reflect"
         },
 
         deprecated: true,
+
+        replacedBy: [],
 
         schema: [
             {
@@ -45,7 +49,11 @@ module.exports = {
                 },
                 additionalProperties: false
             }
-        ]
+        ],
+
+        messages: {
+            preferReflect: "Avoid using {{existing}}, instead use {{substitute}}."
+        }
     },
 
     create(context) {
@@ -61,7 +69,7 @@ module.exports = {
             preventExtensions: "Object.preventExtensions"
         };
 
-        const reflectSubsitutes = {
+        const reflectSubstitutes = {
             apply: "Reflect.apply",
             call: "Reflect.apply",
             defineProperty: "Reflect.defineProperty",
@@ -83,21 +91,25 @@ module.exports = {
          * @returns {void}
          */
         function report(node, existing, substitute) {
-            context.report({ node, message: "Avoid using {{existing}}, instead use {{substitute}}.", data: {
-                existing,
-                substitute
-            } });
+            context.report({
+                node,
+                messageId: "preferReflect",
+                data: {
+                    existing,
+                    substitute
+                }
+            });
         }
 
         return {
             CallExpression(node) {
                 const methodName = (node.callee.property || {}).name;
                 const isReflectCall = (node.callee.object || {}).name === "Reflect";
-                const hasReflectSubsitute = reflectSubsitutes.hasOwnProperty(methodName);
+                const hasReflectSubsitute = Object.prototype.hasOwnProperty.call(reflectSubstitutes, methodName);
                 const userConfiguredException = exceptions.indexOf(methodName) !== -1;
 
                 if (hasReflectSubsitute && !isReflectCall && !userConfiguredException) {
-                    report(node, existingNames[methodName], reflectSubsitutes[methodName]);
+                    report(node, existingNames[methodName], reflectSubstitutes[methodName]);
                 }
             },
             UnaryExpression(node) {

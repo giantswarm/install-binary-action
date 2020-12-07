@@ -10,13 +10,20 @@
 
 module.exports = {
     meta: {
+        type: "suggestion",
+
         docs: {
             description: "disallow the use of `undefined` as an identifier",
             category: "Variables",
-            recommended: false
+            recommended: false,
+            url: "https://eslint.org/docs/rules/no-undefined"
         },
 
-        schema: []
+        schema: [],
+
+        messages: {
+            unexpectedUndefined: "Unexpected use of undefined."
+        }
     },
 
     create(context) {
@@ -29,14 +36,14 @@ module.exports = {
         function report(node) {
             context.report({
                 node,
-                message: "Unexpected use of undefined."
+                messageId: "unexpectedUndefined"
             });
         }
 
         /**
          * Checks the given scope for references to `undefined` and reports
          * all references found.
-         * @param {escope.Scope} scope The scope to check.
+         * @param {eslint-scope.Scope} scope The scope to check.
          * @returns {void}
          */
         function checkScope(scope) {
@@ -67,7 +74,7 @@ module.exports = {
                 while (stack.length) {
                     const scope = stack.pop();
 
-                    stack.push.apply(stack, scope.childScopes);
+                    stack.push(...scope.childScopes);
                     checkScope(scope);
                 }
             }

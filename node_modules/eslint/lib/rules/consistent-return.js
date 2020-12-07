@@ -9,26 +9,15 @@
 //------------------------------------------------------------------------------
 
 const lodash = require("lodash");
-
-const astUtils = require("../ast-utils");
+const astUtils = require("./utils/ast-utils");
 
 //------------------------------------------------------------------------------
 // Helpers
 //------------------------------------------------------------------------------
 
 /**
- * Checks whether or not a given node is an `Identifier` node which was named a given name.
- * @param {ASTNode} node - A node to check.
- * @param {string} name - An expected name of the node.
- * @returns {boolean} `true` if the node is an `Identifier` node which was named as expected.
- */
-function isIdentifier(node, name) {
-    return node.type === "Identifier" && node.name === name;
-}
-
-/**
  * Checks whether or not a given code path segment is unreachable.
- * @param {CodePathSegment} segment - A CodePathSegment to check.
+ * @param {CodePathSegment} segment A CodePathSegment to check.
  * @returns {boolean} `true` if the segment is unreachable.
  */
 function isUnreachable(segment) {
@@ -36,10 +25,10 @@ function isUnreachable(segment) {
 }
 
 /**
-* Checks whether a given node is a `constructor` method in an ES6 class
-* @param {ASTNode} node A node to check
-* @returns {boolean} `true` if the node is a `constructor` method
-*/
+ * Checks whether a given node is a `constructor` method in an ES6 class
+ * @param {ASTNode} node A node to check
+ * @returns {boolean} `true` if the node is a `constructor` method
+ */
 function isClassConstructor(node) {
     return node.type === "FunctionExpression" &&
         node.parent &&
@@ -53,21 +42,31 @@ function isClassConstructor(node) {
 
 module.exports = {
     meta: {
+        type: "suggestion",
+
         docs: {
             description: "require `return` statements to either always or never specify values",
             category: "Best Practices",
-            recommended: false
+            recommended: false,
+            url: "https://eslint.org/docs/rules/consistent-return"
         },
 
         schema: [{
             type: "object",
             properties: {
                 treatUndefinedAsUnspecified: {
-                    type: "boolean"
+                    type: "boolean",
+                    default: false
                 }
             },
             additionalProperties: false
-        }]
+        }],
+
+        messages: {
+            missingReturn: "Expected to return a value at the end of {{name}}.",
+            missingReturnValue: "{{name}} expected a return value.",
+            unexpectedReturnValue: "{{name}} expected no return value."
+        }
     },
 
     create(context) {
@@ -78,8 +77,7 @@ module.exports = {
         /**
          * Checks whether of not the implicit returning is consistent if the last
          * code path segment is reachable.
-         *
-         * @param {ASTNode} node - A program/function node to check.
+         * @param {ASTNode} node A program/function node to check.
          * @returns {void}
          */
         function checkLastSegment(node) {
@@ -128,7 +126,7 @@ module.exports = {
             context.report({
                 node,
                 loc,
-                message: "Expected to return a value at the end of {{name}}.",
+                messageId: "missingReturn",
                 data: { name }
             });
         }
@@ -142,7 +140,7 @@ module.exports = {
                     codePath,
                     hasReturn: false,
                     hasReturnValue: false,
-                    message: "",
+                    messageId: "",
                     node
                 };
             },
@@ -156,23 +154,22 @@ module.exports = {
                 let hasReturnValue = Boolean(argument);
 
                 if (treatUndefinedAsUnspecified && hasReturnValue) {
-                    hasReturnValue = !isIdentifier(argument, "undefined") && argument.operator !== "void";
+                    hasReturnValue = !astUtils.isSpecificId(argument, "undefined") && argument.operator !== "void";
                 }
 
                 if (!funcInfo.hasReturn) {
                     funcInfo.hasReturn = true;
                     funcInfo.hasReturnValue = hasReturnValue;
-                    funcInfo.message = "{{name}} expected {{which}} return value.";
+                    funcInfo.messageId = hasReturnValue ? "missingReturnValue" : "unexpectedReturnValue";
                     funcInfo.data = {
                         name: funcInfo.node.type === "Program"
                             ? "Program"
-                            : lodash.upperFirst(astUtils.getFunctionNameWithKind(funcInfo.node)),
-                        which: hasReturnValue ? "a" : "no"
+                            : lodash.upperFirst(astUtils.getFunctionNameWithKind(funcInfo.node))
                     };
                 } else if (funcInfo.hasReturnValue !== hasReturnValue) {
                     context.report({
                         node,
-                        message: funcInfo.message,
+                        messageId: funcInfo.messageId,
                         data: funcInfo.data
                     });
                 }
