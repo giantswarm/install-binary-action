@@ -1,14 +1,18 @@
+# DO NOT EDIT. Generated with:
+#
+#    devctl@3.1.1-dev
+#
 version: 2
 updates:
-  - package-ecosystem: "npm"
+  - package-ecosystem: github-actions
     directory: "/"
     schedule:
       interval: weekly
       time: "04:00"
-    target-branch: master
-  - package-ecosystem: "github-actions"
+    open-pull-requests-limit: 10
+  - package-ecosystem: npm
     directory: "/"
     schedule:
       interval: weekly
       time: "04:00"
-    target-branch: master
+    open-pull-requests-limit: 10
