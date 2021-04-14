@@ -91,7 +91,7 @@ jobs:
         run: |
           ${{ env.DIR }}/${{ env.BINARY }} version
       - name: Upload artifact
-        uses: actions/upload-artifact@v2.2.2
+        uses: actions/upload-artifact@v2.2.3
         with:
           name: "${{ env.BINARY }}"
           path: "${{ env.DIR }}/${{ env.BINARY }}"
