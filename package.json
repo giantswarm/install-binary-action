@@ -19,7 +19,7 @@
   "dependencies": {
     "@actions/core": "^1.2.7",
     "@actions/exec": "^1.0.4",
-    "@actions/tool-cache": "^1.6.1"
+    "@actions/tool-cache": "^1.7.2"
   },
   "devDependencies": {
     "eslint": "^7.25.0"
