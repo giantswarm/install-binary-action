@@ -21,7 +21,7 @@ async function run() {
     tarballBinaryPath = fillTemplate(tarballBinaryPath)
     smokeTest = fillTemplate(smokeTest);
 
-    core.info(`donwload URL:         ${downloadURL}`)
+    core.info(`download URL:         ${downloadURL}`)
     core.info(`tarball binary path:  ${tarballBinaryPath}`)
     core.info(`smoke test:           ${smokeTest}`)
 
