@@ -7,7 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Update action to use NodeJS 16
+
 ## [1.0.0] - 2020-10-20
+
+Initial release
 
 [Unreleased]: https://github.com/giantswarm/install-binary-action/compare/v1.0.0...HEAD
 [1.0.0]: https://github.com/giantswarm/install-binary-action/releases/tag/v1.0.0
