@@ -1,6 +1,6 @@
 {
-  "name": "my-js-action",
-  "version": "0.1.0",
+  "name": "install-binary-action",
+  "version": "1.0.0",
   "description": "GitHub action to install compressed binary from a given URL.",
   "main": "index.js",
   "scripts": {
@@ -13,9 +13,9 @@
   "author": "",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/kopiczko/my-js-action/issues"
+    "url": "https://github.com/giantswarm/install-binary-action/issues"
   },
-  "homepage": "https://github.com/kopiczko/my-js-action#readme",
+  "homepage": "https://github.com/giantswarm/install-binary-action#readme",
   "dependencies": {
     "@actions/core": "^1.2.7",
     "@actions/exec": "^1.0.4",
