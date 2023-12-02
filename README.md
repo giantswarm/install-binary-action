@@ -10,6 +10,10 @@ To check all the inputs and their defaults see [action.yml](action.yml) file.
 
 **Required.** Name of the binary to be installed.
 
+### `binary_new_name`
+
+**Optional.** New name for the binary, useful when the downloaded binary has OS related variable in its name like `<binary>-darwin-arm64`, `<binary>-linux-amd64`, etc.
+
 ### `version`
 
 **Required.** Version of the binary to be installed.

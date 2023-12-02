@@ -4,6 +4,9 @@ inputs:
   binary:
     description: 'Name of the binary. E.g. "architect"'
     required: true
+  binary_new_name:
+    description: 'Binary new name.'
+    required: false
   version:
     description: 'Version. E.g. "architect"'
     required: true
