@@ -16,8 +16,12 @@ jobs:
           node-version: "16"
       - name: Checkout code
         uses: actions/checkout@v3
-      - name: Lint
-        run: "npm run lint"
+      - name: Run yarn install
+        run: yarn install
+      - name: Run yarn lint
+        run: yarn lint
+      - name: Check ./dist/index.js is up to date
+        run: yarn dist && git diff --exit-code
       - name: Test downloading Giant Swarm binary
         uses: ./
         with:
