@@ -7,11 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Update action to use NodeJS 20.
+
 ## [1.1.0] - 2023-01-19
 
-### Changed
-
-- Update action to use NodeJS 16
+- Update action to use NodeJS 16.
 
 ## [1.0.0] - 2020-10-20
 
