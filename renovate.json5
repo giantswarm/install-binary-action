@@ -38,7 +38,7 @@
       "groupName": "JS dependencies",
     },
     {
-      "matchDepTypes": ["action"],
+      "matchManagers": ["github-actions"],
       "groupName": "GitHub Actions dependencies",
     },
   ],
