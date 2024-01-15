@@ -20,5 +20,5 @@ jobs:
     name: Ensure major version tags
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4.1.1
       - uses: giantswarm/floating-tags-action@v1
