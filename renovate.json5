@@ -38,10 +38,11 @@
       "groupName": "JS dependencies",
     },
     {
-      "fileMatch": [
-        // Copied from https://docs.renovatebot.com/modules/manager/github-actions/#file-matching
-        "(^|/)(workflow-templates|\\.(?:github|gitea|forgejo)/(?:workflows|actions))/.+\\.ya?ml$",
-        "(^|/)action\\.ya?ml$"
+      "matchFileNames": [
+        ".github/yaml",
+        ".github/yml",
+        ".github/workflows/*.yaml",
+        ".github/workflows/*.yml",
       ],
       "groupName": "GitHub Actions dependencies",
     },
