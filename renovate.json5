@@ -42,7 +42,7 @@
         // Copied from https://docs.renovatebot.com/modules/manager/github-actions/#file-matching
         "(^|/)(workflow-templates|\\.(?:github|gitea|forgejo)/(?:workflows|actions))/.+\\.ya?ml$",
         "(^|/)action\\.ya?ml$"
-      ]
+      ],
       "groupName": "GitHub Actions dependencies",
     },
   ],
