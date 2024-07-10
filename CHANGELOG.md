@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Handle unarchived downloads. If downloaded file has no extension assume it's a binary.
+
 ## [2.0.0] - 2024-02-01
 
 - Update action to use NodeJS 20.

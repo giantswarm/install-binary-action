@@ -17,7 +17,8 @@ To check all the inputs and their defaults see [action.yml](action.yml) file.
 ### `download_url`
 
 **Optional.** Archive download URL. Can be in template format. Templated
-variables are `${binary}` and `${version}`.
+variables are `${binary}` and `${version}`. If the URL has to extension then no
+unarchiving will happen.
 
 ### `tarball_binary_path`
 
