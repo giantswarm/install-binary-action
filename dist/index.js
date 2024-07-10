@@ -30468,8 +30468,9 @@ const core = __nccwpck_require__(2186);
 const exec = __nccwpck_require__(1514);
 const tc = __nccwpck_require__(7784);
 
-async function run() {
+const paths = __nccwpck_require__(1017);
 
+async function run() {
   try {
     let binary = core.getInput('binary');
     let version = core.getInput('version');
@@ -30501,19 +30502,25 @@ async function run() {
 }
 
 async function installTool(name, version, url, stripComponents, wildcard) {
-  let cachedPath = tc.find(name, version)
+  let cachedPath = tc.find(name, version);
   if (cachedPath) {
-      core.addPath(cachedPath)
-      return
+    core.addPath(cachedPath);
+    return;
   }
 
   const path = await tc.downloadTool(url);
 
-  await exec.exec(`mkdir ${name}`)
-  await exec.exec(`tar -C ${name} -xzvf ${path} --strip-components ${stripComponents} --wildcards ${wildcard}`)
+  await exec.exec(`mkdir ${name}`);
+  if (paths.extname(path) === '') {
+    // If there is not extension, assume this is an unarchived binary.
+    await exec.exec(`mv "${path}" "${name}/${name}"`);
+    await exec.exec(`chmod +x "${name}/${name}"`);
+  } else {
+    await exec.exec(`tar -C ${name} -xzvf ${path} --strip-components ${stripComponents} --wildcards ${wildcard}`);
+  }
 
   cachedPath = await tc.cacheDir(name, name, version);
-  core.addPath(cachedPath)
+  core.addPath(cachedPath);
 }
 
 run();
