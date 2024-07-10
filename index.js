@@ -45,7 +45,7 @@ async function installTool(name, version, url, stripComponents, wildcard) {
   const path = await tc.downloadTool(url);
 
   await exec.exec(`mkdir ${name}`);
-  if (paths.extname(path) === '') {
+  if (paths.extname(url) === '') {
     // If there is not extension, assume this is an unarchived binary.
     await exec.exec(`mv "${path}" "${name}/${name}"`);
     await exec.exec(`chmod +x "${name}/${name}"`);
