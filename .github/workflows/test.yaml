@@ -44,5 +44,4 @@ jobs:
           binary: "vendir"
           version: "0.40.2"
           download_url: "https://github.com/carvel-dev/vendir/releases/download/v${version}/vendir-linux-amd64"
-          tarball_binary_path: "*/src/${binary}"
           smoke_test: "${binary} --version"

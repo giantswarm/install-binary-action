@@ -58,3 +58,15 @@ Downloading an external binary with all optional inputs set:
     tarball_binary_path: "*/src/${binary}"
     smoke_test: "${binary} --version"
 ```
+
+Downloading an unarchived binary:
+
+```yaml
+- name: Test downloading external unarchived binary
+  uses: ./
+  with:
+    binary: "vendir"
+    version: "0.40.2"
+    download_url: "https://github.com/carvel-dev/vendir/releases/download/v${version}/vendir-linux-amd64"
+    smoke_test: "${binary} --version"
+```
