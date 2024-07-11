@@ -22,16 +22,27 @@ jobs:
         run: yarn lint
       - name: Check ./dist/index.js is up to date
         run: yarn dist && git diff --exit-code
+
       - name: Test downloading Giant Swarm binary
         uses: ./
         with:
           binary: "devctl"
           version: "2.0.0"
+
       - name: Test downloading external binary
         uses: ./
         with:
           binary: "semver"
           version: "3.0.0"
           download_url: "https://github.com/fsaintjacques/${binary}-tool/archive/${version}.tar.gz"
+          tarball_binary_path: "*/src/${binary}"
+          smoke_test: "${binary} --version"
+
+      - name: Test downloading external unarchived binary
+        uses: ./
+        with:
+          binary: "vendir"
+          version: "0.40.2"
+          download_url: "https://github.com/carvel-dev/vendir/releases/download/v${version}/vendir-linux-amd64"
           tarball_binary_path: "*/src/${binary}"
           smoke_test: "${binary} --version"

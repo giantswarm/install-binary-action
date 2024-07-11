@@ -8,7 +8,7 @@ inputs:
     description: 'Version. E.g. "architect"'
     required: true
   download_url:
-    description: 'Download URL template. Available variables are ${binary} and ${version}.'
+    description: 'Download URL template. Available variables are ${binary} and ${version}. If the URL has to extension then no unarchiving will happen.'
     required: false
     default: 'https://github.com/giantswarm/${binary}/releases/download/v${version}/${binary}-v${version}-linux-amd64.tar.gz'
   tarball_binary_path:
