@@ -5,7 +5,7 @@
   "description": "GitHub action to install compressed binary from a given URL.",
   "main": "index.js",
   "scripts": {
-    "lint": "./node_modules/.bin/eslint ./index.js",
+    "lint": "./node_modules/.bin/eslint",
     "dist": "ncc build -o dist index.js"
   },
   "repository": {
