@@ -1,33 +1,32 @@
-const core = require('@actions/core');
-const exec = require('@actions/exec');
-const tc = require('@actions/tool-cache');
+import core from '@actions/core';
+import exec from '@actions/exec';
+import tc from '@actions/tool-cache';
 
-async function run() {
-
+const run = async () => {
   try {
     const binary = core.getInput('binary');
-    const binaryNewName = core.getInput('binary_new_name');
     const version = core.getInput('version');
+    const binaryNewName = core.getInput('binary_new_name');
     let downloadURL = core.getInput('download_url');
     let tarballBinaryPath = core.getInput('tarball_binary_path');
     let smokeTest = core.getInput('smoke_test');
 
-    const fillTemplate = function(s) {
-      s = s.replace(/\$\{binary\}/g, binary);
-      s = s.replace(/\$\{version\}/g, version);
-      return s;
-    }
+    const fillTemplate = str => 
+      str
+        .replace(/\$\{binary\}/ug, binary)
+        .replace(/\$\{version\}/ug, version);
 
     downloadURL = fillTemplate(downloadURL);
-    tarballBinaryPath = fillTemplate(tarballBinaryPath);
+    tarballBinaryPath = fillTemplate(tarballBinaryPath)
     smokeTest = fillTemplate(smokeTest);
+
     core.info(`binary:               ${binary}`);
     if (binaryNewName) {
       core.info(`binaryNewName:        ${binaryNewName}`);
     }
-    core.info(`download URL:         ${downloadURL}`);
-    core.info(`tarball binary path:  ${tarballBinaryPath}`);
-    core.info(`smoke test:           ${smokeTest}`);
+    core.info(`download URL:         ${downloadURL}`)
+    core.info(`tarball binary path:  ${tarballBinaryPath}`)
+    core.info(`smoke test:           ${smokeTest}`)
 
     const stripComponents = tarballBinaryPath.split("/").length - 1;
 
@@ -38,15 +37,15 @@ async function run() {
   }
 }
 
-async function getUnTarCommand(name, path, stripComponents, wildcard, binaryNewName) {
+const getUnTarCommand = (name, path, stripComponents, wildcard, binaryNewName) => {
   let command = `tar -C ${name} -xzvf ${path} --strip-components ${stripComponents} --wildcards ${wildcard}`;
   if (binaryNewName) {
     command += ` --transform=s/${wildcard}/${binaryNewName}/`;
   }
-  return command
+  return command;
 }
 
-async function installTool(name, version, url, stripComponents, wildcard, binaryNewName) {
+const installTool = async (name, version, url, stripComponents, wildcard, binaryNewName) => {
   let cachedPath = tc.find(name, version);
   if (cachedPath) {
     core.addPath(cachedPath);
@@ -55,7 +54,7 @@ async function installTool(name, version, url, stripComponents, wildcard, binary
 
   const path = await tc.downloadTool(url);
   await exec.exec(`mkdir ${name}`);
-  const unTarCommand = await getUnTarCommand(name, path, stripComponents, wildcard, binaryNewName);
+  const unTarCommand = getUnTarCommand(name, path, stripComponents, wildcard, binaryNewName);
   await exec.exec(`${unTarCommand}`);
 
   cachedPath = await tc.cacheDir(name, name, version);
