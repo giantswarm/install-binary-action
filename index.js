@@ -5,9 +5,9 @@ const tc = require('@actions/tool-cache');
 async function run() {
 
   try {
-    let binary = core.getInput('binary');
-    let binaryNewName = core.getInput('binary_new_name');
-    let version = core.getInput('version');
+    const binary = core.getInput('binary');
+    const binaryNewName = core.getInput('binary_new_name');
+    const version = core.getInput('version');
     let downloadURL = core.getInput('download_url');
     let tarballBinaryPath = core.getInput('tarball_binary_path');
     let smokeTest = core.getInput('smoke_test');
@@ -41,7 +41,7 @@ async function run() {
 async function getUnTarCommand(name, path, stripComponents, wildcard, binaryNewName) {
   let command = `tar -C ${name} -xzvf ${path} --strip-components ${stripComponents} --wildcards ${wildcard}`;
   if (binaryNewName) {
-    command = command + ` --transform=s/${wildcard}/${binaryNewName}/`;
+    command += ` --transform=s/${wildcard}/${binaryNewName}/`;
   }
   return command
 }
@@ -55,7 +55,7 @@ async function installTool(name, version, url, stripComponents, wildcard, binary
 
   const path = await tc.downloadTool(url);
   await exec.exec(`mkdir ${name}`);
-  let unTarCommand = await getUnTarCommand(name, path, stripComponents, wildcard, binaryNewName);
+  const unTarCommand = await getUnTarCommand(name, path, stripComponents, wildcard, binaryNewName);
   await exec.exec(`${unTarCommand}`);
 
   cachedPath = await tc.cacheDir(name, name, version);
