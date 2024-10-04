@@ -5,6 +5,9 @@ on:
     branches:
       - master
 
+env:
+  AWS_NUKE_VERSION: 'v2.25.0'
+
 jobs:
   test:
     name: Test
@@ -28,7 +31,6 @@ jobs:
         with:
           binary: "devctl"
           version: "2.0.0"
-
       - name: Test downloading external binary
         uses: ./
         with:
@@ -37,11 +39,21 @@ jobs:
           download_url: "https://github.com/fsaintjacques/${binary}-tool/archive/${version}.tar.gz"
           tarball_binary_path: "*/src/${binary}"
           smoke_test: "${binary} --version"
-
-      - name: Test downloading external unarchived binary
+      - name: Set OS information related variables
+        run: |
+          echo "OS_NAME=$(uname -s | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
+          echo "OS_ARCH=$(dpkg --print-architecture)" >> $GITHUB_ENV
+          echo "OS_ARCH_TYPE=$(arch)" >> $GITHUB_ENV
+      - name: Set download aws-nuke download url and download binary name variables
+        run: |
+          echo "AWS_NUKE_DOWNLOAD_URL=https://github.com/rebuy-de/aws-nuke/releases/download/${{ env.AWS_NUKE_VERSION }}/aws-nuke-${{ env.AWS_NUKE_VERSION }}-${OS_NAME}-${OS_ARCH}.tar.gz" >> $GITHUB_ENV
+          echo "AWS_NUKE_DOWNLOAD_BINARY_NAME=aws-nuke-${{ env.AWS_NUKE_VERSION }}-${{ env.OS_NAME }}-${{ env.OS_ARCH }}" >> $GITHUB_ENV
+      - name: Test downloading aws-nuke
         uses: ./
         with:
-          binary: "vendir"
-          version: "0.40.2"
-          download_url: "https://github.com/carvel-dev/vendir/releases/download/v${version}/vendir-linux-amd64"
-          smoke_test: "${binary} --version"
+          binary: "aws-nuke"
+          version: "${{ env.AWS_NUKE_VERSION }}"
+          download_url: "${{ env.AWS_NUKE_DOWNLOAD_URL }}"
+          tarball_binary_path: "${{ env.AWS_NUKE_DOWNLOAD_BINARY_NAME }}"
+          smoke_test: "${binary} version"
+          binary_new_name: "aws-nuke"

@@ -30,6 +30,10 @@ be in template format. Templated variables are `${binary}` and `${version}`.
 **Optional.** Smoke test to run after the binary is installed. Can be in
 template format. Templated variables are `${binary}` and `${version}`.
 
+## `binary_new_name`
+
+**Optional.** Name of the binary once is uncompressed and installed in the selected directory.
+
 ## Outputs
 
 This action doesn't have any outputs.
@@ -46,7 +50,7 @@ Downloading a Giant Swarm binary with optional inputs left with default values:
     version: "2.0.0"
 ```
 
-Downloading an external binary with all optional inputs set:
+Downloading an external binary with all optional inputs set except `binary_new_name` :
 
 ```yaml
 - name: Test downloading external binary
@@ -57,6 +61,20 @@ Downloading an external binary with all optional inputs set:
     download_url: "https://github.com/fsaintjacques/${binary}-tool/archive/${version}.tar.gz"
     tarball_binary_path: "*/src/${binary}"
     smoke_test: "${binary} --version"
+```
+
+Downloading an external binary with all optional inputs including `binary_new_name` :
+
+```yaml
+- name: Test downloading aws-nuke with binary new name
+  uses: ./
+  with:
+    binary: "aws-nuke"
+    version: "v2.25.0"
+    download_url: "https://github.com/rebuy-de/aws-nuke/releases/download/${version}/aws-nuke-${version}-linux-amd64.tar.gz"
+    tarball_binary_path: "aws-nuke-${version}-linux-amd64"
+    smoke_test: "${binary} version"
+    binary_new_name: "aws-nuke"
 ```
 
 Downloading an unarchived binary:

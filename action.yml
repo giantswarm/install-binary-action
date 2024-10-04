@@ -19,6 +19,9 @@ inputs:
     description: 'Template of the binary smoke test.'
     required: false
     default: '${binary} version'
+  binary_new_name:
+    description: 'Name of the binary once is installed. E.g. "aws"'
+    required: false
 outputs: {}
 runs:
   using: 'node20'
