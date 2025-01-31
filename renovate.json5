@@ -27,24 +27,5 @@
       ],
       "groupName": "typescript",
     },
-    {
-      "excludePackageNames": [
-        "typescript",
-      ],
-      "excludePackagePatterns": [
-        "eslint",
-      ],
-      "matchDepTypes": ["dependencies"],
-      "groupName": "JS dependencies",
-    },
-    {
-      "matchFileNames": [
-        ".github/yaml",
-        ".github/yml",
-        ".github/workflows/*.yaml",
-        ".github/workflows/*.yml",
-      ],
-      "groupName": "GitHub Actions dependencies",
-    },
   ],
 }
