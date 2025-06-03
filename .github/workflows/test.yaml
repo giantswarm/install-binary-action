@@ -13,7 +13,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "24"
       - name: Checkout code
         uses: actions/checkout@v4
       - name: Run yarn install
@@ -23,16 +23,22 @@ jobs:
       - name: Check ./dist/index.js is up to date
         run: yarn dist && git diff --exit-code
 
-      - name: Test downloading Giant Swarm binary
+      - name: Test downloading Giant Swarm binary with strict semver
         uses: ./
         with:
-          binary: "devctl"
-          version: "2.0.0"
+          binary: devctl
+          version: "7.2.6"
+
+      - name: Test downloading Giant Swarm binary with v prefix
+        uses: ./
+        with:
+          binary: devctl
+          version: "v7.2.6"
 
       - name: Test downloading external binary
         uses: ./
         with:
-          binary: "semver"
+          binary: semver
           version: "3.0.0"
           download_url: "https://github.com/fsaintjacques/${binary}-tool/archive/${version}.tar.gz"
           tarball_binary_path: "*/src/${binary}"
@@ -41,7 +47,7 @@ jobs:
       - name: Test downloading binary with renaming
         uses: ./
         with:
-          binary: "aws-nuke"
+          binary: aws-nuke
           version: "v2.25.0"
           download_url: "https://github.com/rebuy-de/aws-nuke/releases/download/${version}/aws-nuke-${version}-linux-amd64.tar.gz"
           tarball_binary_path: "aws-nuke-${version}-linux-amd64"
