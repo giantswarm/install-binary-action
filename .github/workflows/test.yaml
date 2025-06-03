@@ -35,6 +35,12 @@ jobs:
           binary: devctl
           version: "v7.2.6"
 
+      - name: Test downloading another Giant Swarm binary with v prefix
+        uses: ./
+        with:
+          binary: architect
+          version: "v6.17.0"
+    
       - name: Test downloading external binary
         uses: ./
         with:
