@@ -40,6 +40,7 @@ jobs:
         with:
           binary: architect
           version: "v6.17.0"
+          download_url: "https://github.com/giantswarm/architect/releases/download/${version}/architect-${version}-linux-amd64.tar.gz"
     
       - name: Test downloading external binary
         uses: ./
