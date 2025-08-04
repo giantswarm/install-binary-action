@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Add input `binary_new_name`.
+
 ## [3.0.0] - 2024-07-11
 
 - Handle unarchived downloads. If downloaded file has no extension assume it's a binary.
