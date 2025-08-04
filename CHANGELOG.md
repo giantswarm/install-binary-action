@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.1.0] - 2025-08-04
+
 ## [3.0.0] - 2024-07-11
 
 - Handle unarchived downloads. If downloaded file has no extension assume it's a binary.
@@ -23,7 +25,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Initial release
 
-[Unreleased]: https://github.com/giantswarm/install-binary-action/compare/v3.0.0...HEAD
+[Unreleased]: https://github.com/giantswarm/install-binary-action/compare/v3.1.0...HEAD
+[3.1.0]: https://github.com/giantswarm/install-binary-action/compare/v3.0.0...v3.1.0
 [3.0.0]: https://github.com/giantswarm/install-binary-action/compare/v2.0.0...v3.0.0
 [2.0.0]: https://github.com/giantswarm/install-binary-action/compare/v1.1.0...v2.0.0
 [1.1.0]: https://github.com/giantswarm/install-binary-action/compare/v1.0.0...v1.1.0
