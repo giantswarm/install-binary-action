@@ -1,3 +1,4 @@
+import paths from 'path';
 import core from '@actions/core';
 import exec from '@actions/exec';
 import tc from '@actions/tool-cache';
