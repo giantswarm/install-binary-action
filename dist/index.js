@@ -29727,21 +29727,23 @@ module.exports = parseParams
 /******/ 
 /************************************************************************/
 var __webpack_exports__ = {};
-/* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_0__ = __nccwpck_require__(7484);
-/* harmony import */ var _actions_exec__WEBPACK_IMPORTED_MODULE_1__ = __nccwpck_require__(5236);
-/* harmony import */ var _actions_tool_cache__WEBPACK_IMPORTED_MODULE_2__ = __nccwpck_require__(3472);
+/* harmony import */ var path__WEBPACK_IMPORTED_MODULE_0__ = __nccwpck_require__(6928);
+/* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_1__ = __nccwpck_require__(7484);
+/* harmony import */ var _actions_exec__WEBPACK_IMPORTED_MODULE_2__ = __nccwpck_require__(5236);
+/* harmony import */ var _actions_tool_cache__WEBPACK_IMPORTED_MODULE_3__ = __nccwpck_require__(3472);
+
 
 
 
 
 const run = async () => {
   try {
-    const binary = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('binary');
-    const version = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('version');
-    const binaryNewName = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('binary_new_name');
-    let downloadURL = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('download_url');
-    let tarballBinaryPath = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('tarball_binary_path');
-    let smokeTest = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('smoke_test');
+    const binary = _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput('binary');
+    const version = _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput('version');
+    const binaryNewName = _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput('binary_new_name');
+    let downloadURL = _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput('download_url');
+    let tarballBinaryPath = _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput('tarball_binary_path');
+    let smokeTest = _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput('smoke_test');
 
     const fillTemplate = str => 
       str
@@ -29752,20 +29754,20 @@ const run = async () => {
     tarballBinaryPath = fillTemplate(tarballBinaryPath)
     smokeTest = fillTemplate(smokeTest);
 
-    _actions_core__WEBPACK_IMPORTED_MODULE_0__.info(`binary:               ${binary}`);
+    _actions_core__WEBPACK_IMPORTED_MODULE_1__.info(`binary:               ${binary}`);
     if (binaryNewName) {
-      _actions_core__WEBPACK_IMPORTED_MODULE_0__.info(`binaryNewName:        ${binaryNewName}`);
+      _actions_core__WEBPACK_IMPORTED_MODULE_1__.info(`binaryNewName:        ${binaryNewName}`);
     }
-    _actions_core__WEBPACK_IMPORTED_MODULE_0__.info(`download URL:         ${downloadURL}`)
-    _actions_core__WEBPACK_IMPORTED_MODULE_0__.info(`tarball binary path:  ${tarballBinaryPath}`)
-    _actions_core__WEBPACK_IMPORTED_MODULE_0__.info(`smoke test:           ${smokeTest}`)
+    _actions_core__WEBPACK_IMPORTED_MODULE_1__.info(`download URL:         ${downloadURL}`)
+    _actions_core__WEBPACK_IMPORTED_MODULE_1__.info(`tarball binary path:  ${tarballBinaryPath}`)
+    _actions_core__WEBPACK_IMPORTED_MODULE_1__.info(`smoke test:           ${smokeTest}`)
 
     const stripComponents = tarballBinaryPath.split("/").length - 1;
 
     await installTool(binary, version, downloadURL, stripComponents, tarballBinaryPath, binaryNewName);
-    await _actions_exec__WEBPACK_IMPORTED_MODULE_1__.exec(smokeTest);
+    await _actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec(smokeTest);
   } catch (error) {
-    _actions_core__WEBPACK_IMPORTED_MODULE_0__.setFailed(error.message);
+    _actions_core__WEBPACK_IMPORTED_MODULE_1__.setFailed(error.message);
   }
 }
 
@@ -29778,19 +29780,27 @@ const getUnTarCommand = (name, path, stripComponents, wildcard, binaryNewName) =
 }
 
 const installTool = async (name, version, url, stripComponents, wildcard, binaryNewName) => {
-  let cachedPath = _actions_tool_cache__WEBPACK_IMPORTED_MODULE_2__.find(name, version);
+  let cachedPath = _actions_tool_cache__WEBPACK_IMPORTED_MODULE_3__.find(name, version);
   if (cachedPath) {
-    _actions_core__WEBPACK_IMPORTED_MODULE_0__.addPath(cachedPath);
+    _actions_core__WEBPACK_IMPORTED_MODULE_1__.addPath(cachedPath);
     return
   }
 
-  const path = await _actions_tool_cache__WEBPACK_IMPORTED_MODULE_2__.downloadTool(url);
-  await _actions_exec__WEBPACK_IMPORTED_MODULE_1__.exec(`mkdir ${name}`);
-  const unTarCommand = getUnTarCommand(name, path, stripComponents, wildcard, binaryNewName);
-  await _actions_exec__WEBPACK_IMPORTED_MODULE_1__.exec(`${unTarCommand}`);
+  const path = await _actions_tool_cache__WEBPACK_IMPORTED_MODULE_3__.downloadTool(url);
+  await _actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec(`mkdir ${name}`);
 
-  cachedPath = await _actions_tool_cache__WEBPACK_IMPORTED_MODULE_2__.cacheDir(name, name, version);
-  _actions_core__WEBPACK_IMPORTED_MODULE_0__.addPath(cachedPath);
+  if (path__WEBPACK_IMPORTED_MODULE_0__.extname(url) === '') {
+    // If there is not extension, assume this is an unarchived binary.
+    await _actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec(`mv "${path}" "${name}/${name}"`);
+    await _actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec(`chmod +x "${name}/${name}"`);
+  } else {
+    const unTarCommand = getUnTarCommand(name, path, stripComponents, wildcard, binaryNewName);
+    await _actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec(`${unTarCommand}`);
+  }
+
+  cachedPath = await _actions_tool_cache__WEBPACK_IMPORTED_MODULE_3__.cacheDir(name, name, version);
+  _actions_core__WEBPACK_IMPORTED_MODULE_1__.addPath(cachedPath);
 }
 
 run();
+
