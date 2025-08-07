@@ -54,8 +54,15 @@ const installTool = async (name, version, url, stripComponents, wildcard, binary
 
   const path = await tc.downloadTool(url);
   await exec.exec(`mkdir ${name}`);
-  const unTarCommand = getUnTarCommand(name, path, stripComponents, wildcard, binaryNewName);
-  await exec.exec(`${unTarCommand}`);
+
+  if (paths.extname(url) === '') {
+    // If there is not extension, assume this is an unarchived binary.
+    await exec.exec(`mv "${path}" "${name}/${name}"`);
+    await exec.exec(`chmod +x "${name}/${name}"`);
+  } else {
+    const unTarCommand = getUnTarCommand(name, path, stripComponents, wildcard, binaryNewName);
+    await exec.exec(`${unTarCommand}`);
+  }
 
   cachedPath = await tc.cacheDir(name, name, version);
   core.addPath(cachedPath);
