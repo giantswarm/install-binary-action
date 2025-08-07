@@ -60,3 +60,11 @@ jobs:
           tarball_binary_path: "aws-nuke-${version}-linux-amd64"
           smoke_test: "${binary} version"
           binary_new_name: "aws-nuke"
+
+      - name: Test downloading external unarchived binary
+        uses: ./
+        with:
+          binary: "vendir"
+          version: "0.40.2"
+          download_url: "https://github.com/carvel-dev/vendir/releases/download/v${version}/vendir-linux-amd64"
+          smoke_test: "${binary} --version"
