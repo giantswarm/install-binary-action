@@ -15,7 +15,7 @@ jobs:
         with:
           node-version: "24"
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Run yarn install
         run: yarn install
       - name: Run yarn lint
