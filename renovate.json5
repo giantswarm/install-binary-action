@@ -1,30 +1,28 @@
 {
-  "extends": [
-    "github>giantswarm/renovate-presets:default.json5",
-    "github>giantswarm/renovate-presets:disable-ansible.json5",
-    "github>giantswarm/renovate-presets:disable-kustomize.json5",
+  extends: [
+    'github>giantswarm/renovate-presets:default.json5',
+    'github>giantswarm/renovate-presets:disable-ansible.json5',
+    'github>giantswarm/renovate-presets:disable-kustomize.json5',
   ],
-  "packageRules": [
+  packageRules: [
     {
-      "matchPackagePatterns": [
-        "node",
+      groupName: 'node',
+      matchPackageNames: [
+        '/node/',
       ],
-      "groupName": "node",
     },
     {
-      "excludePackageNames": [
-        "typescript",
+      groupName: 'eslint',
+      matchPackageNames: [
+        '!typescript',
+        '/eslint/',
       ],
-      "matchPackagePatterns": [
-        "eslint",
-      ],
-      "groupName": "eslint",
     },
     {
-      "matchPackageNames": [
-        "typescript",
+      matchPackageNames: [
+        'typescript',
       ],
-      "groupName": "typescript",
+      groupName: 'typescript',
     },
   ],
 }
