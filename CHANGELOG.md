@@ -12,6 +12,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Use NodeJS v24
+- Bump @actions/core to v2
+- Bump @actions/exec to v2
 
 ## [3.1.1] - 2025-08-07
 
