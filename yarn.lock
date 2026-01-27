@@ -30,19 +30,27 @@
     tunnel "^0.0.6"
     undici "^5.28.5"
 
+"@actions/http-client@^3.0.2":
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/@actions/http-client/-/http-client-3.0.2.tgz#3db9c83af9d29d51ac8c30b45bc17f7014beb1b2"
+  integrity sha512-JP38FYYpyqvUsz+Igqlc/JG6YO9PaKuvqjM3iGvaLqFnJ7TFmcLyy2IDrY0bI0qCQug8E9K+elv5ZNfw62ZJzA==
+  dependencies:
+    tunnel "^0.0.6"
+    undici "^6.23.0"
+
 "@actions/io@^2.0.0":
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/@actions/io/-/io-2.0.0.tgz#3ad1271ba3cd515324f2215e8d4c1c0c3864d65b"
   integrity sha512-Jv33IN09XLO+0HS79aaODsvIRyduiF7NY/F6LYeK5oeUmrsz7aFdRphQjFoESF4jS7lMauDOttKALcpapVDIAg==
 
-"@actions/tool-cache@3.0.0":
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/@actions/tool-cache/-/tool-cache-3.0.0.tgz#78526510671d7abcb15824ac336aa366ef0d0cc2"
-  integrity sha512-JBx8gEWuu8Lqaqx/hEnL6QdKvF06suBR4y+dBDi9vJbHx1r+p6QtmBKhQYhiKjDUYIoDX1bUrbyAYPChoPK+XA==
+"@actions/tool-cache@3.0.1":
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/@actions/tool-cache/-/tool-cache-3.0.1.tgz#36ea7e8904fc2f64af7fe5dc33d0783b004e402d"
+  integrity sha512-euK7sID37jMg1yWGkdXkLPI5Te7x/+2QMUPeHXogcpzUZ81mqlDZ+CgYhQo3LtB8LpVnnQyjs+hTTU0Ir4Y0RQ==
   dependencies:
     "@actions/core" "^2.0.1"
     "@actions/exec" "^2.0.0"
-    "@actions/http-client" "^3.0.1"
+    "@actions/http-client" "^3.0.2"
     "@actions/io" "^2.0.0"
     semver "^6.1.0"
 
@@ -639,6 +647,11 @@ undici@^5.28.5:
   integrity sha512-raqeBD6NQK4SkWhQzeYKd1KmIG6dllBOTt55Rmkt4HtI9mwdWtJljnrXjAFUBLTSN67HWrOIZ3EPF4kjUw80Bg==
   dependencies:
     "@fastify/busboy" "^2.0.0"
+
+undici@^6.23.0:
+  version "6.23.0"
+  resolved "https://registry.yarnpkg.com/undici/-/undici-6.23.0.tgz#7953087744d9095a96f115de3140ca3828aff3a4"
+  integrity sha512-VfQPToRA5FZs/qJxLIinmU59u0r7LXqoJkCzinq3ckNJp3vKEh7jTWN589YQ5+aoAC/TGRLyJLCPKcLQbM8r9g==
 
 uri-js@^4.2.2:
   version "4.4.1"
