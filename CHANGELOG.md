@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Extract downloaded binaries into a unique directory under `RUNNER_TEMP`
+  instead of the workspace, so the action no longer fails with
+  `mkdir: cannot create directory 'X': File exists` when a workspace file or
+  directory has the same name as the binary being installed
+  ([#334](https://github.com/giantswarm/install-binary-action/issues/334)).
+
 ## [4.0.0] - 2025-12-12
 
 ### Changed
