@@ -68,3 +68,29 @@ jobs:
           version: "0.40.2"
           download_url: "https://github.com/carvel-dev/vendir/releases/download/v${version}/vendir-linux-amd64"
           smoke_test: "${binary} --version"
+
+      # Regression test for https://github.com/giantswarm/install-binary-action/issues/334
+      # Earlier versions ran `mkdir <binary>` in the workspace and failed when
+      # a file or directory with the same name was already checked out.
+      - name: Pre-create colliding workspace entries (regression for #334)
+        run: |
+          mkdir -p helm
+          touch jq
+      - name: Test tarball install with colliding workspace directory
+        uses: ./
+        with:
+          binary: helm
+          version: "3.17.3"
+          download_url: "https://get.helm.sh/helm-v${version}-linux-amd64.tar.gz"
+          tarball_binary_path: "*/${binary}"
+          smoke_test: "${binary} version"
+      - name: Test unarchived install with colliding workspace file
+        uses: ./
+        with:
+          binary: jq
+          version: "1.7.1"
+          download_url: "https://github.com/jqlang/jq/releases/download/jq-${version}/jq-linux-amd64"
+          smoke_test: "${binary} --version"
+      - name: Cleanup colliding workspace entries
+        if: always()
+        run: rm -rf helm jq

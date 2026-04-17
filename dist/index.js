@@ -30559,8 +30559,12 @@ var __webpack_exports__ = {};
 
 ;// CONCATENATED MODULE: external "path"
 const external_path_namespaceObject = __WEBPACK_EXTERNAL_createRequire(import.meta.url)("path");
+;// CONCATENATED MODULE: external "fs"
+const external_fs_namespaceObject = __WEBPACK_EXTERNAL_createRequire(import.meta.url)("fs");
 ;// CONCATENATED MODULE: external "os"
 const external_os_namespaceObject = __WEBPACK_EXTERNAL_createRequire(import.meta.url)("os");
+;// CONCATENATED MODULE: external "process"
+const external_process_namespaceObject = __WEBPACK_EXTERNAL_createRequire(import.meta.url)("process");
 ;// CONCATENATED MODULE: ./node_modules/@actions/core/lib/utils.js
 // We use any as a valid input type
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -30691,8 +30695,6 @@ function escapeProperty(s) {
 //# sourceMappingURL=command.js.map
 ;// CONCATENATED MODULE: external "crypto"
 const external_crypto_namespaceObject = __WEBPACK_EXTERNAL_createRequire(import.meta.url)("crypto");
-;// CONCATENATED MODULE: external "fs"
-const external_fs_namespaceObject = __WEBPACK_EXTERNAL_createRequire(import.meta.url)("fs");
 ;// CONCATENATED MODULE: ./node_modules/@actions/core/lib/file-command.js
 // For internal use, subject to change.
 // We use any as a valid input type
@@ -34310,6 +34312,9 @@ function _unique(values) {
 
 
 
+
+
+
 const run = async () => {
   try {
     const binary = getInput('binary');
@@ -34345,8 +34350,8 @@ const run = async () => {
   }
 }
 
-const getUnTarCommand = (name, path, stripComponents, wildcard, binaryNewName) => {
-  let command = `tar -C ${name} -xzvf ${path} --strip-components ${stripComponents} --wildcards ${wildcard}`;
+const getUnTarCommand = (extractDir, path, stripComponents, wildcard, binaryNewName) => {
+  let command = `tar -C ${extractDir} -xzvf ${path} --strip-components ${stripComponents} --wildcards ${wildcard}`;
   if (binaryNewName) {
     command += ` --transform=s/${wildcard}/${binaryNewName}/`;
   }
@@ -34361,18 +34366,24 @@ const installTool = async (name, version, url, stripComponents, wildcard, binary
   }
 
   const path = await downloadTool(url);
-  await exec_exec(`mkdir ${name}`);
+
+  // Extract into a unique directory under RUNNER_TEMP (or the OS temp dir
+  // When running outside GitHub Actions) so the binary name cannot collide
+  // With files or directories that already exist in the workspace.
+  const tempRoot = external_process_namespaceObject.env.RUNNER_TEMP || external_os_namespaceObject.tmpdir();
+  const extractDir = await external_fs_namespaceObject.promises.mkdtemp(external_path_namespaceObject.join(tempRoot, 'install-binary-'));
 
   if (external_path_namespaceObject.extname(url) === '') {
-    // If there is not extension, assume this is an unarchived binary.
-    await exec_exec(`mv "${path}" "${name}/${name}"`);
-    await exec_exec(`chmod +x "${name}/${name}"`);
+    // If there is no extension, assume this is an unarchived binary.
+    const destination = external_path_namespaceObject.join(extractDir, name);
+    await exec_exec(`mv "${path}" "${destination}"`);
+    await exec_exec(`chmod +x "${destination}"`);
   } else {
-    const unTarCommand = getUnTarCommand(name, path, stripComponents, wildcard, binaryNewName);
+    const unTarCommand = getUnTarCommand(extractDir, path, stripComponents, wildcard, binaryNewName);
     await exec_exec(`${unTarCommand}`);
   }
 
-  cachedPath = await cacheDir(name, name, version);
+  cachedPath = await cacheDir(extractDir, name, version);
   addPath(cachedPath);
 }
 
