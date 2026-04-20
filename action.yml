@@ -20,7 +20,7 @@ inputs:
     required: false
     default: '${binary} version'
   binary_new_name:
-    description: 'Name of the binary once is installed. E.g. "aws"'
+    description: 'Name of the binary once is installed. E.g. "aws". Available variables are ${binary} and ${version}.'
     required: false
 outputs: {}
 runs:

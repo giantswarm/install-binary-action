@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Apply `${binary}` / `${version}` template substitution to `binary_new_name`,
+  matching the behaviour already documented for `download_url`,
+  `tarball_binary_path`, and `smoke_test`
+  ([#339](https://github.com/giantswarm/install-binary-action/issues/339)).
+
 ## [4.0.1] - 2026-04-17
 
 ### Fixed

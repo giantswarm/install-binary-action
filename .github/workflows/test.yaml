@@ -98,10 +98,7 @@ jobs:
       # End-to-end coverage of the install steps used in the central
       # pre-commit workflow at giantswarm/github/workflows/zz_generated.pre-commit.yaml.
       # These tarballs ship the binary at the archive root (no subdirectory),
-      # so tarball_binary_path must not contain a wildcard/slash. The
-      # helm-values-schema-json archive additionally names the binary
-      # "schema", so binary_new_name must be supplied as a literal (inputs
-      # other than download_url/tarball_binary_path are NOT template-expanded).
+      # so tarball_binary_path must not contain a wildcard/slash.
       - name: Test install of helm-docs (flat tarball, no rename)
         uses: ./
         with:
@@ -114,14 +111,17 @@ jobs:
         run: |
           which helm-docs
           helm-docs --version
-      - name: Test install of helm-values-schema-json (flat tarball, rename schema -> helm-schema)
+      # Regression test for https://github.com/giantswarm/install-binary-action/issues/339:
+      # binary_new_name must support the same ${binary}/${version} template
+      # substitution as download_url, tarball_binary_path, and smoke_test.
+      - name: Test install of helm-values-schema-json (templated binary_new_name)
         uses: ./
         with:
           binary: helm-schema
           version: "2.3.1"
           download_url: "https://github.com/losisin/helm-values-schema-json/releases/download/v${version}/helm-values-schema-json_${version}_linux_amd64.tgz"
           tarball_binary_path: "schema"
-          binary_new_name: "helm-schema"
+          binary_new_name: "${binary}"
           smoke_test: "${binary} version"
       - name: Verify helm-schema is on PATH
         run: |
