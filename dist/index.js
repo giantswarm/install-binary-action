@@ -34319,7 +34319,7 @@ const run = async () => {
   try {
     const binary = getInput('binary');
     const version = getInput('version');
-    const binaryNewName = getInput('binary_new_name');
+    let binaryNewName = getInput('binary_new_name');
     let downloadURL = getInput('download_url');
     let tarballBinaryPath = getInput('tarball_binary_path');
     let smokeTest = getInput('smoke_test');
@@ -34332,6 +34332,7 @@ const run = async () => {
     downloadURL = fillTemplate(downloadURL);
     tarballBinaryPath = fillTemplate(tarballBinaryPath)
     smokeTest = fillTemplate(smokeTest);
+    binaryNewName = fillTemplate(binaryNewName);
 
     info(`binary:               ${binary}`);
     if (binaryNewName) {

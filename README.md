@@ -32,7 +32,9 @@ template format. Templated variables are `${binary}` and `${version}`.
 
 ## `binary_new_name`
 
-**Optional.** Name of the binary once is uncompressed and installed in the selected directory.
+**Optional.** Name of the binary once is uncompressed and installed in the
+selected directory. Can be in template format. Templated variables are
+`${binary}` and `${version}`.
 
 ## Outputs
 

@@ -10,7 +10,7 @@ const run = async () => {
   try {
     const binary = core.getInput('binary');
     const version = core.getInput('version');
-    const binaryNewName = core.getInput('binary_new_name');
+    let binaryNewName = core.getInput('binary_new_name');
     let downloadURL = core.getInput('download_url');
     let tarballBinaryPath = core.getInput('tarball_binary_path');
     let smokeTest = core.getInput('smoke_test');
@@ -23,6 +23,7 @@ const run = async () => {
     downloadURL = fillTemplate(downloadURL);
     tarballBinaryPath = fillTemplate(tarballBinaryPath)
     smokeTest = fillTemplate(smokeTest);
+    binaryNewName = fillTemplate(binaryNewName);
 
     core.info(`binary:               ${binary}`);
     if (binaryNewName) {
