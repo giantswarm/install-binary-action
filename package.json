@@ -19,7 +19,7 @@
   },
   "homepage": "https://github.com/giantswarm/install-binary-action",
   "dependencies": {
-    "@actions/core": "3.0.0",
+    "@actions/core": "3.0.1",
     "@actions/exec": "3.0.0",
     "@actions/tool-cache": "4.0.0"
   },
