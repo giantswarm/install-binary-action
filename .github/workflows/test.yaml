@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+  workflow_dispatch: {}
 
 jobs:
   test:
@@ -127,3 +128,21 @@ jobs:
         run: |
           which helm-schema
           helm-schema version
+
+      - name: Install jv
+        uses: giantswarm/install-binary-action@e2730babbc89f02ef1559b042d33cbe24f5c3547 # v4.0.2
+        with:
+          binary: jv
+          version: v6.0.2
+          download_url: https://github.com/santhosh-tekuri/jsonschema/releases/download/${version}/jv-${version}-linux-amd64.tar.gz
+          tarball_binary_path: ${binary}
+          smoke_test: "${binary} --version"
+
+
+      - name: Validate components
+        run: |
+          set
+          echo and 1
+          /opt/hostedtoolcache/jv/6.0.2/x64/jv --version
+          echo and 2
+          jv --version
